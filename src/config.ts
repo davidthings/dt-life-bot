@@ -26,16 +26,16 @@ const PROJECT_ROOT = process.cwd();
 const HOME_DIR = process.env.HOME || os.homedir();
 
 // Mount security: allowlist stored OUTSIDE project root, never mounted into containers
+// Per-install override via NANOCLAW_CONFIG_DIR (absolute path). Defaults to ~/.config/nanoclaw.
+const CONFIG_DIR =
+  process.env.NANOCLAW_CONFIG_DIR ||
+  path.join(HOME_DIR, '.config', 'nanoclaw');
 export const MOUNT_ALLOWLIST_PATH = path.join(
-  HOME_DIR,
-  '.config',
-  'nanoclaw',
+  CONFIG_DIR,
   'mount-allowlist.json',
 );
 export const SENDER_ALLOWLIST_PATH = path.join(
-  HOME_DIR,
-  '.config',
-  'nanoclaw',
+  CONFIG_DIR,
   'sender-allowlist.json',
 );
 export const STORE_DIR = path.resolve(PROJECT_ROOT, 'store');
@@ -44,6 +44,9 @@ export const DATA_DIR = path.resolve(PROJECT_ROOT, 'data');
 
 export const CONTAINER_IMAGE =
   process.env.CONTAINER_IMAGE || 'nanoclaw-agent:latest';
+// Container name prefix — lets multiple NanoClaw installs coexist without killing each other's containers.
+export const CONTAINER_NAME_PREFIX =
+  process.env.NANOCLAW_CONTAINER_PREFIX || 'nanoclaw';
 export const CONTAINER_TIMEOUT = parseInt(
   process.env.CONTAINER_TIMEOUT || '1800000',
   10,

@@ -156,12 +156,11 @@ export async function run(_args: string[]): Promise<void> {
   }
 
   // 6. Check mount allowlist
+  const configDir =
+    process.env.NANOCLAW_CONFIG_DIR ||
+    path.join(homeDir, '.config', 'nanoclaw');
   let mountAllowlist = 'missing';
-  if (
-    fs.existsSync(
-      path.join(homeDir, '.config', 'nanoclaw', 'mount-allowlist.json'),
-    )
-  ) {
+  if (fs.existsSync(path.join(configDir, 'mount-allowlist.json'))) {
     mountAllowlist = 'configured';
   }
 
